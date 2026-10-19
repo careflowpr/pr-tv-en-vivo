@@ -1,0 +1,13 @@
+{
+  "name": "pr-tv-en-vivo",
+  "version": "1.0.0",
+  "description": "PR TV en Vivo - Progressive Web App (PWA) de Televisión de Puerto Rico para la diáspora",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "deploy": "npx -y @shipstatic/ship ."
+  },
+  "keywords": ["pwa", "puerto-rico", "tv", "noticias", "wapa", "telemundo", "teleonce", "wipr"],
+  "author": "Gregmarie Lopez",
+  "license": "MIT"
+}
