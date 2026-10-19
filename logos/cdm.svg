@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" width="240" height="80">
+  <defs>
+    <linearGradient id="cdmGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="80" rx="14" fill="#081829"/>
+  <rect x="2" y="2" width="236" height="76" rx="12" fill="none" stroke="#143e6d" stroke-width="2"/>
+  <circle cx="42" cy="40" r="23" fill="url(#cdmGrad)"/>
+  <!-- stylized globe lines -->
+  <ellipse cx="42" cy="40" rx="15" ry="21" fill="none" stroke="#7dd3fc" stroke-width="1.8"/>
+  <line x1="20" y1="40" x2="64" y2="40" stroke="#7dd3fc" stroke-width="1.8"/>
+  <text x="80" y="42" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="900" fill="#38bdf8">CDM</text>
+  <text x="146" y="42" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="700" fill="#f8fafc">7.2</text>
+  <text x="80" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="700" fill="#bae6fd" letter-spacing="1.5">INTERNACIONAL · PUERTO RICO</text>
+</svg>

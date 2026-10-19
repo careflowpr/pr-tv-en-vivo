@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>PR TV en Vivo 🇵🇷 · Televisión de Puerto Rico para la Diáspora</title>
+  
+  <!-- PWA & Mobile Web App Meta Tags -->
+  <meta name="description" content="Mira televisión de Puerto Rico en vivo: WAPA TV, Telemundo PR, TeleOnce, WIPR Canal 6 y más. Transmisiones oficiales para la diáspora puertorriqueña en Texas y EE.UU.">
+  <meta name="theme-color" content="#070d19">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PR TV">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+
+  <!-- Manifest & Icons -->
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/png" sizes="64x64" href="./icons/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="PR TV en Vivo 🇵🇷 · Canales de Puerto Rico">
+  <meta property="og:description" content="Transmisiones oficiales de televisión de Puerto Rico disponibles para la diáspora en Texas y EE.UU.">
+  <meta property="og:image" content="./icons/icon-512.png">
+  <meta property="og:type" content="website">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <!-- PWA Install Floating Banner (Android / Chrome) -->
+  <aside id="pwaInstallBanner" class="pwa-install-banner" style="display: none;" aria-label="Instalar Aplicación">
+    <div class="pwa-banner-content">
+      <img src="./icons/icon-192.png" alt="PR TV" class="pwa-banner-icon" />
+      <div class="pwa-banner-text">
+        <strong>Instalar PR TV en Vivo</strong>
+        <span>Accede como una app en tu pantalla de inicio</span>
+      </div>
+    </div>
+    <div class="pwa-banner-actions">
+      <button id="pwaInstallBtn" class="btn btn-sm btn-install">Instalar App</button>
+      <button class="btn btn-sm btn-dismiss" onclick="document.getElementById('pwaInstallBanner').style.display='none'">✕</button>
+    </div>
+  </aside>
+
+  <!-- Barra Superior de Navegación -->
+  <header class="app-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="flag-crest" title="Bandera de Puerto Rico">
+          <span class="flag-star">★</span>
+        </div>
+        <div class="brand-info">
+          <h1 class="brand-title">PR TV <span class="live-pill"><span class="pulse-dot"></span> EN VIVO</span></h1>
+          <p class="brand-subtitle">Televisión de Puerto Rico para nuestra gente en Texas</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn btn-header" onclick="shareApp()" title="Compartir con un familiar">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="18" cy="5" r="3"/>
+            <circle cx="6" cy="12" r="3"/>
+            <circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          <span class="btn-label">Compartir</span>
+        </button>
+
+        <button class="btn btn-header btn-guide" onclick="openGuideModal()" title="Guía y Horarios">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span class="btn-label">Guía Texas</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Barra de Comparativa Horaria PR vs Texas -->
+  <section class="time-bar" aria-label="Horarios en tiempo real">
+    <div class="container time-bar-inner">
+      <div class="time-item">
+        <span class="time-flag">🇵🇷</span>
+        <span class="time-label">Puerto Rico (AST):</span>
+        <strong id="prClock" class="time-value">--:-- --</strong>
+      </div>
+      <div class="time-divider">|</div>
+      <div class="time-item">
+        <span class="time-flag">🇺🇸</span>
+        <span class="time-label">Texas (Centro):</span>
+        <strong id="txClock" class="time-value">--:-- --</strong>
+      </div>
+      <div class="time-tip">
+        <span class="tip-icon">💡</span>
+        <span class="tip-text">PR está <strong>1 hora adelante</strong> de Texas. (Noticieros de las 4:00 PM AST empiezan a las 3:00 PM en Texas).</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contenido Principal -->
+  <main class="container main-content">
+    
+    <!-- Barra de Búsqueda y Filtros -->
+    <section class="controls-section">
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input 
+          type="search" 
+          id="channelSearch" 
+          placeholder="Buscar canal, noticiero, programa (ej. WAPA, Jugando Pelota Dura, WIPR)..." 
+          autocomplete="off" 
+          aria-label="Buscar canal"
+        />
+      </div>
+
+      <nav class="filter-tabs" aria-label="Filtrar canales">
+        <button class="filter-tab active" data-filter="all">Todos</button>
+        <button class="filter-tab fav-tab" data-filter="favs">
+          ⭐ Favoritos <span id="favCountBadge" class="tab-count">4</span>
+        </button>
+        <button class="filter-tab" data-filter="general">General</button>
+        <button class="filter-tab" data-filter="noticias">Noticias</button>
+        <button class="filter-tab" data-filter="publico">Público / WIPR</button>
+        <button class="filter-tab" data-filter="familiar">Familiar / Religioso</button>
+        <button class="filter-tab" data-filter="radio">Radio en Vivo</button>
+      </nav>
+    </section>
+
+    <!-- Banner Informativo Legal / Transparencia -->
+    <section class="transparency-banner">
+      <div class="transparency-icon">ℹ️</div>
+      <div class="transparency-text">
+        <strong>Transmisiones 100% Oficiales y Legales:</strong>
+        <span>
+          Esta aplicación conecta exclusivamente con las señales oficiales de cada canal. 
+          Los noticieros y coberturas de emergencia transmiten en vivo abierto a todo público; la señal 24/7 de canales comerciales (WAPA, Telemundo) puede requerir cable en EE.UU. debido a contratos de sindicación.
+        </span>
+      </div>
+    </section>
+
+    <!-- Parrilla de Canales -->
+    <section id="channelsGrid" class="channels-grid" aria-label="Canales de televisión">
+      <!-- Inyectado dinámicamente por app.js -->
+    </section>
+
+    <!-- Estado Vacío -->
+    <div id="emptyState" class="empty-state" style="display: none;">
+      <div class="empty-icon">📺</div>
+      <h3>No se encontraron canales</h3>
+      <p>Intenta con otro término de búsqueda o cambia la categoría de filtro.</p>
+    </div>
+
+  </main>
+
+  <!-- Modal Reproductor de Video Integrado -->
+  <div id="videoModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="videoModalTitle">
+    <div class="modal-card modal-player-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="live-dot-pulse"></span>
+          <h2 id="videoModalTitle" class="modal-title">Canal en Vivo</h2>
+        </div>
+        <div class="modal-player-controls">
+          <button class="btn-icon" onclick="togglePlayerFullscreen()" title="Pantalla Completa" aria-label="Pantalla Completa">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+            </svg>
+          </button>
+          <button class="btn-icon btn-close" onclick="closeVideoModal()" title="Cerrar reproductor" aria-label="Cerrar">✕</button>
+        </div>
+      </div>
+
+      <div id="videoFrameWrap" class="video-frame-wrap">
+        <!-- El iframe se inyecta dinámicamente -->
+      </div>
+
+      <div class="modal-footer-player">
+        <p id="videoModalNotes" class="modal-notes"></p>
+        <div class="modal-actions-row">
+          <button id="modalOfficialBtn" class="btn btn-outline">
+            ↗ Abrir en Web Oficial
+          </button>
+          <button id="modalYoutubeBtn" class="btn btn-youtube">
+            📺 Ver en YouTube Oficial
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Señal Oficial (WAPA, Telemundo, TeleOnce) -->
+  <div id="portalModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="portalModalTitle">
+    <div class="modal-card modal-portal-card">
+      <div class="modal-header">
+        <h2 id="portalModalTitle" class="modal-title">Señal Oficial del Canal</h2>
+        <button class="btn-icon btn-close" onclick="closePortalModal()" title="Cerrar" aria-label="Cerrar">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="portal-logo-center">
+          <img id="portalModalLogo" src="" alt="Canal" class="modal-logo-img" />
+        </div>
+
+        <div class="portal-info-box">
+          <div class="info-row">
+            <span class="info-icon">📡</span>
+            <div>
+              <strong id="portalStatusSummary">Disponibilidad Oficial</strong>
+              <p id="portalStatusDetail" class="info-text"></p>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <span class="info-icon">⏰</span>
+            <div>
+              <strong>Horario habitual de transmisiones en directo:</strong>
+              <p id="portalSchedule" class="info-text"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="security-note">
+          🔒 <em>Por razones de seguridad y derechos de autor oficiales, este canal se reproduce directamente en su portal verificado o en su cobertura oficial de YouTube.</em>
+        </div>
+
+        <div class="portal-actions">
+          <button id="portalOpenPrimaryBtn" class="btn btn-primary btn-large">
+            ▶ Abrir Transmisión en Vivo Oficial
+          </button>
+          <button id="portalOpenYoutubeBtn" class="btn btn-youtube btn-large">
+            📺 Ver Cobertura en YouTube Oficial
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Guía para la Diáspora en Texas -->
+  <div id="guideModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+    <div class="modal-card modal-guide-card">
+      <div class="modal-header">
+        <h2 id="guideTitle" class="modal-title">Guía de Televisión de PR en Texas</h2>
+        <button class="btn-icon btn-close" onclick="closeGuideModal()" title="Cerrar" aria-label="Cerrar">✕</button>
+      </div>
+
+      <div class="modal-body guide-content">
+        <section class="guide-block">
+          <h3>🕒 Diferencia de Hora entre Texas y Puerto Rico</h3>
+          <p>
+            Puerto Rico está en la zona horaria <strong>AST (UTC-4)</strong> todo el año y nunca cambia la hora.
+            La mayor parte de Texas está en <strong>Central Time (CT)</strong>.
+          </p>
+          <div class="table-wrap">
+            <table class="guide-table">
+              <thead>
+                <tr>
+                  <th>Programa / Noticiero</th>
+                  <th>Hora Puerto Rico (AST)</th>
+                  <th>Hora Texas (CT)</th>
+                  <th>Canal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>NotiCentro al Amanecer</td>
+                  <td>5:00 AM</td>
+                  <td>4:00 AM</td>
+                  <td>WAPA Canal 4</td>
+                </tr>
+                <tr>
+                  <td>En la Mañana</td>
+                  <td>5:00 AM</td>
+                  <td>4:00 AM</td>
+                  <td>TeleOnce Canal 11</td>
+                </tr>
+                <tr>
+                  <td>Telenoticias Mediodía</td>
+                  <td>11:00 AM</td>
+                  <td>10:00 AM</td>
+                  <td>Telemundo Canal 2</td>
+                </tr>
+                <tr>
+                  <td>Las Noticias Mediodía</td>
+                  <td>12:00 PM</td>
+                  <td>11:00 AM</td>
+                  <td>TeleOnce Canal 11</td>
+                </tr>
+                <tr>
+                  <td>NotiCentro Edición Estelar</td>
+                  <td>4:00 PM</td>
+                  <td>3:00 PM</td>
+                  <td>WAPA Canal 4</td>
+                </tr>
+                <tr>
+                  <td>Telenoticias Central</td>
+                  <td>5:00 PM</td>
+                  <td>4:00 PM</td>
+                  <td>Telemundo Canal 2</td>
+                </tr>
+                <tr>
+                  <td>Jugando Pelota Dura</td>
+                  <td>7:00 PM</td>
+                  <td>6:00 PM</td>
+                  <td>TeleOnce Canal 11</td>
+                </tr>
+                <tr>
+                  <td>Telenoticias Nocturno</td>
+                  <td>10:00 PM</td>
+                  <td>9:00 PM</td>
+                  <td>Telemundo Canal 2</td>
+                </tr>
+                <tr>
+                  <td>WIPR Noticias &amp; Cultura</td>
+                  <td>24 Horas</td>
+                  <td>24 Horas</td>
+                  <td>WIPR Canal 6</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="guide-block">
+          <h3>📲 ¿Cómo instalar la App en tu Teléfono?</h3>
+          <div class="steps-grid">
+            <div class="step-card">
+              <h4>🍏 En iPhone / iPad (Safari)</h4>
+              <ol>
+                <li>Abre este enlace en el navegador <strong>Safari</strong>.</li>
+                <li>Toca el botón <strong>Compartir</strong> (el cuadrado con la flecha hacia arriba en la parte inferior).</li>
+                <li>Baja y selecciona <strong>"Agregar a pantalla de inicio"</strong> (Add to Home Screen).</li>
+                <li>Toca <strong>"Agregar"</strong> y ¡listo! Tendrás el icono en tu pantalla como una aplicación normal.</li>
+              </ol>
+            </div>
+            <div class="step-card">
+              <h4>🤖 En Android (Google Chrome)</h4>
+              <ol>
+                <li>Abre este enlace en <strong>Google Chrome</strong>.</li>
+                <li>Toca el botón de tres puntos (⋮) en la esquina superior derecha.</li>
+                <li>Selecciona <strong>"Instalar aplicación"</strong> o "Agregar a pantalla principal".</li>
+                <li>Confirma tocando <strong>"Instalar"</strong>.</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="guide-block">
+          <h3>⚖️ Acerca de las Transmisiones y Derechos</h3>
+          <p>
+            Esta app cumple 100% con los términos de transmisión legal de los canales de Puerto Rico:
+          </p>
+          <ul>
+            <li><strong>WIPR (Canal 6) y TeleOro (Canal 13):</strong> Transmiten su señal educativa y cultural 24/7 abierta sin restricciones territoriales.</li>
+            <li><strong>WAPA TV, Telemundo y TeleOnce:</strong> Transmiten abiertamente sus noticieros, coberturas meteorológicas y análisis político. La programación extranjera o sindicada (películas de Hollywood, series) se restringe a territorio insular por contratos con las productoras originales.</li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="closeGuideModal()">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pie de Página -->
+  <footer class="app-footer">
+    <div class="container footer-inner">
+      <div class="footer-pr-badge">
+        <span class="flag-icon">🇵🇷</span>
+        <span>Hecho con amor para nuestra gente puertorriqueña en Texas y la diáspora</span>
+      </div>
+      <p class="footer-disclaimer">
+        PR TV en Vivo es una guía de acceso rápido a las transmisiones oficiales y públicas de televisión y radio de Puerto Rico. Todos los logotipos, señales y marcas son propiedad exclusiva de sus respectivas emisoras.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Script Principal -->
+  <script src="./app.js"></script>
+</body>
+</html>

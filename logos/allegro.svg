@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" width="240" height="80">
+  <defs>
+    <linearGradient id="radGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14b8a6"/>
+      <stop offset="100%" stop-color="#0f766e"/>
+    </linearGradient>
+  </defs>
+  <rect width="240" height="80" rx="14" fill="#071b19"/>
+  <rect x="2" y="2" width="236" height="76" rx="12" fill="none" stroke="#134e48" stroke-width="2"/>
+  <circle cx="42" cy="40" r="22" fill="url(#radGrad)"/>
+  <!-- soundwave icon -->
+  <path d="M 33 46 L 33 34 M 38 50 L 38 30 M 42 54 L 42 26 M 46 50 L 46 30 M 51 46 L 51 34" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="78" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="900" fill="#2dd4bf">PRTV RADIO</text>
+  <text x="78" y="61" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="700" fill="#99f6e4" letter-spacing="1.5">940 AM &amp; ALLEGRO 91.3 FM</text>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" width="240" height="80">
+  <rect width="240" height="80" rx="14" fill="#0d1117"/>
+  <rect x="2" y="2" width="236" height="76" rx="12" fill="none" stroke="#30363d" stroke-width="2"/>
+  <circle cx="44" cy="40" r="22" fill="#21262d"/>
+  <text x="44" y="48" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="900" fill="#ffffff" text-anchor="middle">abc</text>
+  <text x="80" y="44" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="30" font-weight="900" fill="#ffffff">5 <tspan font-size="16" font-weight="700" fill="#60a5fa">PR</tspan></text>
+  <text x="80" y="63" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="700" fill="#9ca3af" letter-spacing="1.5">WORA-TV · NOTICIAS LOCALES</text>
+</svg>
